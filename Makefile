@@ -36,10 +36,10 @@ rendered-manifest.yaml: $(OUT)/rendered-manifest.yaml
 
 $(OUT)/rendered-manifest.yaml: $(HELM_FILES) | $(OUT)
 	helm template \
-	    --name example-webhook \
+	    --name cert-manager-webhook-domainoffensive \
             --set image.repository=$(IMAGE_NAME) \
             --set image.tag=$(IMAGE_TAG) \
-            deploy/example-webhook > $@
+            deploy/cert-manager-webhook-domainoffensive > $@
 
 _test $(OUT) _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH):
 	mkdir -p $@
