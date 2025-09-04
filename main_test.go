@@ -4,9 +4,8 @@ import (
 	"os"
 	"testing"
 
+	// "github.com/MarkusBauer/domain-offensive-webhook"
 	acmetest "github.com/cert-manager/cert-manager/test/acme"
-
-	"github.com/cert-manager/webhook-example/example"
 )
 
 var (
@@ -20,20 +19,20 @@ func TestRunsSuite(t *testing.T) {
 	//
 
 	// Uncomment the below fixture when implementing your custom DNS provider
-	//fixture := acmetest.NewFixture(&customDNSProviderSolver{},
+	//fixture := acmetest.NewFixture(&domainoffensiveDNSProviderSolver{},
 	//	acmetest.SetResolvedZone(zone),
 	//	acmetest.SetAllowAmbientCredentials(false),
-	//	acmetest.SetManifestPath("testdata/my-custom-solver"),
+	//	acmetest.SetManifestPath("testdata/domainoffensive-solver"),
 	//	acmetest.SetBinariesPath("_test/kubebuilder/bin"),
 	//)
-	solver := example.New("59351")
+	solver := New()
 	fixture := acmetest.NewFixture(solver,
-		acmetest.SetResolvedZone("example.com."),
-		acmetest.SetManifestPath("testdata/my-custom-solver"),
-		acmetest.SetDNSServer("127.0.0.1:59351"),
+		acmetest.SetResolvedZone("mk-bauer.de."),
+		acmetest.SetManifestPath("testdata/domainoffensive-solver"),
+		acmetest.SetDNSServer("192.174.68.21:53"), // ns1.domainoffensive.de
 		acmetest.SetUseAuthoritative(false),
 	)
-	//need to uncomment and  RunConformance delete runBasic and runExtended once https://github.com/cert-manager/cert-manager/pull/4835 is merged
+	//need to uncomment RunConformance and delete runBasic and runExtended once https://github.com/cert-manager/cert-manager/pull/4835 is merged
 	//fixture.RunConformance(t)
 	fixture.RunBasic(t)
 	fixture.RunExtended(t)
