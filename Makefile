@@ -3,13 +3,14 @@ OS ?= $(shell $(GO) env GOOS)
 ARCH ?= $(shell $(GO) env GOARCH)
 
 IMAGE_NAME := "webhook"
+IMAGE_PUBLISH_NAME := "markusbauer/cert-manager-webhook-domainoffensive"
 IMAGE_TAG := "latest"
 
 OUT := $(shell pwd)/_out
 
 KUBEBUILDER_VERSION=1.28.0
 
-HELM_FILES := $(shell find deploy/example-webhook)
+HELM_FILES := $(shell find deploy/cert-manager-webhook-domainoffensive)
 
 test: _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/etcd _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/kube-apiserver _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/kubectl
 	TEST_ASSET_ETCD=_test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/etcd \
@@ -30,6 +31,11 @@ clean:
 .PHONY: build
 build:
 	docker build -t "$(IMAGE_NAME):$(IMAGE_TAG)" .
+
+.PHONY: publish-all
+publish-all:
+	docker buildx build -t "$(IMAGE_PUBLISH_NAME):$(IMAGE_TAG)" -f Dockerfile-crosscompile --platform="linux/amd64,linux/arm64,linux/arm/v7" --push .
+	#docker buildx build -t "$(IMAGE_PUBLISH_NAME):$(IMAGE_TAG)" -f Dockerfile-crosscompile --platform="linux/arm64" --push .
 
 .PHONY: rendered-manifest.yaml
 rendered-manifest.yaml: $(OUT)/rendered-manifest.yaml
