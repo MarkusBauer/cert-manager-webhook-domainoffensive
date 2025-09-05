@@ -69,6 +69,11 @@ If your setup is working, you should switch to Let's Encrypt's production certif
 - (optional) rename the issuer from `letsencrypt-staging` to `letsencrypt-prod`, including `privateKeySecretRef` and the certificate's `issuerRef`
 
 
+### Pitfalls
+- If you have a wildcard CNAME on your domain (e.g., `CNAME *.your-domain.com`), ensure it has a reasonably low TTL (e.g., 15min). 
+  Otherwise, the DNS propagation check will hang for a very long time and eventually fail.
+
+
 ## Running the test suite
 
 First, edit [domainoffensive-secret.yml](testdata/domainoffensive-solver/domainoffensive-secret.yml) and insert your token.
