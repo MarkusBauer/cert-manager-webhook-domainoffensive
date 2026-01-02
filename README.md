@@ -57,7 +57,7 @@ spec:
     - "your-domain.com"
     - "*.your-domain.com"
   issuerRef:
-    kind: Issuer
+    kind: ClusterIssuer
     name: letsencrypt-staging
   secretName: your-domain-wildcard
 ```
